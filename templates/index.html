@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Failure Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .radiant-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff6b6b, #ee5a6f);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #4ecdc4, #44a08d);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #feca57, #ff9ff3);
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 100px 20px 20px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 0;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #feca57);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 16px 32px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(78, 205, 196, 0.5);
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+        }
+
+        .content-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #4ecdc4;
+            text-align: center;
+        }
+
+        .content-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #feca57;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .tips-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .tip-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .tip-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .tip-card h4 {
+            color: #ff6b6b;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .exercise-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .exercise-list li {
+            background: rgba(78, 205, 196, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .exercise-list li strong {
+            color: #4ecdc4;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            
+            .content-section {
+                padding: 25px;
+            }
+            
+            .tips-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="radiant-orb orb-1"></div>
+        <div class="radiant-orb orb-2"></div>
+        <div class="radiant-orb orb-3"></div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><a href="/">CardioRisk</a></div>
+            <div class="nav-links">
+                <a href="/diagnostics">Get Diagnostics</a>
+                <a href="/data">Check Data</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="hero-section">
+            <h1>Healthy Heart Prediction</h1>
+            <p>Advanced AI-powered cardiovascular risk assessment</p>
+            <a href="/diagnostics" class="cta-button">Start Assessment</a>
+        </section>
+
+        <section class="content-section">
+            <h2>Taking Care of Your Heart</h2>
+            <p>Your heart is one of the most important organs in your body, working tirelessly to pump blood and deliver oxygen to every cell. Maintaining cardiovascular health is crucial for your overall well-being and longevity. Understanding the factors that contribute to heart disease can help you make informed decisions about your lifestyle and health choices.</p>
+            
+            <p>Heart failure occurs when the heart muscle doesn't pump blood as well as it should. This can be caused by various factors including coronary artery disease, high blood pressure, diabetes, and lifestyle factors. Early detection and preventive measures can significantly reduce your risk and improve your quality of life.</p>
+        </section>
+
+        <section class="content-section">
+            <h2>Scientific Tips for Heart Health</h2>
+            <div class="tips-grid">
+                <div class="tip-card">
+                    <h4>🍎 Nutrition Excellence</h4>
+                    <p>Follow a Mediterranean-style diet rich in omega-3 fatty acids, antioxidants, and fiber. Include leafy greens, berries, nuts, fish, and whole grains while limiting processed foods and saturated fats.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>🩺 Monitor Key Metrics</h4>
+                    <p>Keep track of your blood pressure, cholesterol levels, blood sugar, and body weight. Regular monitoring helps detect early warning signs and allows for timely intervention.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>😴 Quality Sleep</h4>
+                    <p>Aim for 7-9 hours of quality sleep nightly. Poor sleep is linked to increased risk of heart disease, high blood pressure, and inflammation.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>🚭 Eliminate Toxins</h4>
+                    <p>Avoid smoking and limit alcohol consumption. Even secondhand smoke significantly increases cardiovascular risk. If you smoke, quitting is the single best thing you can do for your heart.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>🧘 Stress Management</h4>
+                    <p>Chronic stress contributes to heart disease. Practice meditation, deep breathing, yoga, or other stress-reduction techniques to maintain mental and cardiovascular health.</p>
+                </div>
+                
+                <div class="tip-card">
+                    <h4>💊 Medication Compliance</h4>
+                    <p>If prescribed heart medications, take them exactly as directed. Don't stop or change dosages without consulting your healthcare provider, even if you feel better.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <h2>Heart-Healthy Exercises</h2>
+            <h3>Cardiovascular Strengthening Routine</h3>
+            <p>Regular physical activity is one of the most effective ways to strengthen your heart muscle, improve circulation, and reduce cardiovascular risk factors. Here are scientifically-backed exercises:</p>
+            
+            <ul class="exercise-list">
+                <li><strong>Brisk Walking:</strong> 30 minutes daily at a pace where you can still hold a conversation. This low-impact exercise improves circulation and strengthens the heart muscle.</li>
+                
+                <li><strong>Swimming:</strong> 20-30 minutes, 3-4 times per week. Full-body workout that's easy on joints while providing excellent cardiovascular benefits.</li>
+                
+                <li><strong>Cycling:</strong> 45 minutes, 3 times per week at moderate intensity. Builds leg strength and improves heart efficiency.</li>
+                
+                <li><strong>Interval Training:</strong> Alternate between high and low intensity for 20 minutes. This improves heart rate variability and cardiovascular fitness.</li>
+                
+                <li><strong>Resistance Training:</strong> 2-3 times per week using weights or resistance bands. Helps maintain healthy blood pressure and improves overall strength.</li>
+                
+                <li><strong>Yoga:</strong> 30 minutes daily. Combines gentle movement with stress reduction, helping to lower blood pressure and improve heart rate variability.</li>
+                
+                <li><strong>Dancing:</strong> 30-45 minutes of energetic dancing. Fun cardiovascular exercise that also provides social interaction and mental health benefits.</li>
+            </ul>
+            
+            <h3>Getting Started Safely</h3>
+            <p>Always consult with your healthcare provider before starting a new exercise program, especially if you have existing heart conditions. Start slowly and gradually increase intensity. Listen to your body and stop if you experience chest pain, severe shortness of breath, or dizziness.</p>
+            
+            <p>Remember: The best exercise is the one you'll do consistently. Find activities you enjoy and make them part of your daily routine for long-term heart health success.</p>
+        </section>
+    </div>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', function () {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                // Scroll Down - Hide navbar
+                navbar.style.top = "-100px";
+            } else {
+                // Scroll Up - Show navbar
+                navbar.style.top = "0";
+            }
+            lastScrollTop = scrollTop;
+        });
+    </script>
+
+</body>
+</html>

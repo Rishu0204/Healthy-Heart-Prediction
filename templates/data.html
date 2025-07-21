@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Failure Clinical Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: auto;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .radiant-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #3e2323, #3e2323);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #4ecdc4, #44a08d);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #feca57, #ff9ff3);
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .back-btn {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(78, 205, 196, 0.5);
+            border-radius: 12px;
+            color: #4ecdc4;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            margin-right: 30px;
+        }
+
+        .back-btn:hover {
+            background: rgba(78, 205, 196, 0.2);
+            border-color: #4ecdc4;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #feca57);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+        }
+        .btn-download {
+                display: inline-block;
+                margin: 20px 0;
+                padding: 12px 20px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 2px solid rgba(254, 202, 87, 0.5);
+                border-radius: 12px;
+                color: #feca57;
+                text-decoration: none;
+                font-weight: 600;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(20px);
+            }
+
+            .btn-download:hover {
+                background: rgba(254, 202, 87, 0.2);
+                border-color: #feca57;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(254, 202, 87, 0.3);
+            }
+
+            .pagination {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .pagination a {
+                display: inline-block;
+                margin: 0 10px;
+                padding: 10px 18px;
+                background: rgba(255, 255, 255, 0.08);
+                border: 2px solid rgba(78, 205, 196, 0.5);
+                border-radius: 10px;
+                color: #4ecdc4;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(20px);
+            }
+
+            .pagination a:hover {
+                background: rgba(78, 205, 196, 0.2);
+                border-color: #4ecdc4;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+            }
+
+            .pagination span {
+                display: inline-block;
+                margin: 0 15px;
+                color: #ffffffaa;
+                font-size: 0.95rem;
+            }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .data-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow-x: auto;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        table th {
+            background: linear-gradient(135deg, #3e2323, #4ecdc4);
+            color: white;
+            padding: 15px 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        table tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        table tr:hover {
+            background: rgba(78, 205, 196, 0.1);
+            transition: background 0.3s ease;
+        }
+
+        .stats-info {
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .title {
+                font-size: 2rem;
+            }
+
+            .data-container {
+                padding: 20px;
+            }
+
+            table th,
+            table td {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+   
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><a href="/">CardioRisk</a></div>
+            <div class="nav-links">
+                <a href="/diagnostics">Get Diagnostics</a>
+                <a href="/data">Check Data</a>
+            </div>
+        </div>
+    </nav>
+
+    
+    <div style="text-align: center;margin-top: 80px;">
+        <h1 class="neon-text">Heart Failure Clinical Records</h1>
+        
+    </div>
+    
+    <div class="table-wrapper">
+        {{ table|safe }}
+    </div>
+
+    <div class="pagination">
+        {% if page > 1 %}
+            <a href="{{ url_for('data', page=page-1) }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page }} of {{ total_pages }}</span>
+        {% if page < total_pages %}
+            <a href="{{ url_for('data', page=page+1) }}">Next</a>
+        {% endif %}
+    </div>
+    <div style="text-align: center;">
+        
+        <a href="/download" class="btn-download">⬇ Download CSV</a>
+    </div>
+
+    <script>
+        // Highlight rows with DEATH_EVENT = Yes
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const deathCell = Array.from(row.cells).find(cell => cell.innerText.trim() === 'Yes');
+            if (deathCell && row.innerHTML.includes("DEATH_EVENT")) {
+                row.classList.add("death-event");
+            }
+        });
+    </script>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', function () {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                // Scroll Down - Hide navbar
+                navbar.style.top = "-100px";
+            } else {
+                // Scroll Up - Show navbar
+                navbar.style.top = "0";
+            }
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>

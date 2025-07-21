@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Failure Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .radiant-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff6b6b, #ee5a6f);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #4ecdc4, #44a08d);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #feca57, #ff9ff3);
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #feca57);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            font-size: 1rem;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #4ecdc4;
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+
+        .form-group select option {
+            background: #1a1a2e;
+            color: #ffffff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            margin-top: 30px;
+        }
+
+        .result-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .result-no-failure {
+            color: #4ecdc4;
+            text-shadow: 0 0 10px rgba(78, 205, 196, 0.5);
+        }
+
+        .result-failure {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px 0;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-links a:hover {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+            box-shadow: 0 0 20px rgba(78, 205, 196, 0.3);
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .nav-links a {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo"><a href="/">CardioRisk</a></div>
+            <div class="nav-links">
+                <a href="/diagnostics">Get Diagnostics</a>
+                <a href="/data">Check Data</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="background-effects">
+        <div class="radiant-orb orb-1"></div>
+        <div class="radiant-orb orb-2"></div>
+        <div class="radiant-orb orb-3"></div>
+    </div>
+
+    <div class="container" style="margin-top: 80px;">
+        <div class="header">
+            <h1>Healthy Heart Prediction</h1>
+            <p>Advanced AI-powered cardiovascular risk assessment</p>
+        </div>
+
+        <div class="form-container">
+            <form action="/predict" method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="age">Age (years)</label>
+                        <input type="number" id="age" name="age" min="0" max="150" step="0.1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="anaemia">Anaemia Status</label>
+                        <select id="anaemia" name="anaemia" required>
+                            <option value="">Select status</option>
+                            <option value="0">No anaemia</option>
+                            <option value="1">Has anaemia</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creatinine_phosphokinase">
+                            Creatinine Phosphokinase (mcg/L) 
+                            <br>
+                            <small class="text-muted">(Normal: Male: 52–336 | Female: 38–176)</small>
+                        </label>
+                        <input type="number" id="creatinine_phosphokinase" name="creatinine_phosphokinase" min="0" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="diabetes">Diabetes Status</label>
+                        <select id="diabetes" name="diabetes" required>
+                            <option value="">Select status</option>
+                            <option value="0">No diabetes</option>
+                            <option value="1">Has diabetes</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ejection_fraction">
+                            Ejection Fraction (%)
+                            <br>
+                            <small class="text-muted">(Normal: 55% – 70%)</small>
+                        </label>
+                        <input type="number" id="ejection_fraction" name="ejection_fraction" min="0" max="100" class="form-control" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="high_blood_pressure">Blood Pressure Status</label>
+                        <select id="high_blood_pressure" name="high_blood_pressure" required>
+                            <option value="">Select status</option>
+                            <option value="0">Normal blood pressure</option>
+                            <option value="1">High blood pressure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="platelets">
+                            Platelets (kiloplatelets/mL)
+                            <br>
+                            <small class="text-muted">(Normal: 150 – 450)</small>
+                        </label>
+                        <input type="number" id="platelets" name="platelets" min="0" class="form-control" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="serum_creatinine">
+                            Serum Creatinine (mg/dL)
+                            <br>
+                            <small class="text-muted">(Normal: Male: 0.74–1.35 | Female: 0.59–1.04)</small>
+                        </label>
+                        <input type="number" id="serum_creatinine" name="serum_creatinine" min="0" step="0.01" class="form-control" required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="serum_sodium">
+                            Serum Sodium (mEq/L)
+                            <br>
+                            <small class="text-muted">(Normal: 135 – 145)</small>
+                        </label>
+                        <input type="number" id="serum_sodium" name="serum_sodium" min="0" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="smoking">Smoking Status</label>
+                        <select id="smoking" name="smoking" required>
+                            <option value="">Select status</option>
+                            <option value="0">Non-smoker</option>
+                            <option value="1">Smoker</option>
+                        </select>
+                    </div>
+
+                    
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    Predict Heart Failure Risk
+                </button>
+            </form>
+        </div>
+
+       {% if result %}
+        <div class="result-container">
+            <div class="result-text {% if result == 'No Heart Failure' %}result-no-failure{% else %}result-failure{% endif %}">
+                {{ result }}
+            </div>
+            <p>
+                {% if result == 'No Heart Failure' %}
+                    The model indicates a lower risk of heart failure based on the provided parameters.
+                {% else %}
+                    The model indicates an elevated risk of heart failure. Please consult with a healthcare professional.
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+    <script>
+        let lastScrollTop = 0;
+        const navbar = document.querySelector('.navbar');
+
+        window.addEventListener('scroll', function () {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (scrollTop > lastScrollTop) {
+                // Scroll Down - Hide navbar
+                navbar.style.top = "-100px";
+            } else {
+                // Scroll Up - Show navbar
+                navbar.style.top = "0";
+            }
+            lastScrollTop = scrollTop;
+        });
+    </script>
+</body>
+</html>
