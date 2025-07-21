@@ -65,7 +65,7 @@ Steps involved:
 - **Backend**: Python, Flask
 - **ML Model**: RandomForestClassifier (scikit-learn)
 - **Data Handling**: pandas
-- **Deployment**: Localhost or can be deployed to Streamlit/Vercel with minor changes
+- **Deployment**: Localhost or can be deployed to Render with minor changes
 
 ---
 
