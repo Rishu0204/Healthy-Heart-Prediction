@@ -32,14 +32,15 @@ Based on these inputs, the trained model predicts the likelihood of a heart fail
 - Consistent layout and responsive design
 
 ---
-## 📊 Sample Dataset
+### Sample Dataset
 
-| age | anaemia | creatinine_phosphokinase | diabetes | ejection_fraction | high_blood_pressure | platelets   | serum_creatinine serum_sodium | sex | smoking | DEATH_EVENT |
-|-----|---------|---------------------------|----------|--------------------|----------------------|-------------|------------------|---------------|-----|---------|--------------|
-| 75  | 0       | 582                       | 0        | 20                 | 1                    | 265000.0    | 1.9              | 130           | 1   | 0       | 1            |
-| 55  | 0       | 7861                      | 0        | 38                 | 0                    | 263358.03   | 1.1              | 136           | 1   | 0       | 1            |
-| 65  | 1       | 146                       | 0        | 20                 | 0                    | 162000.0    | 1.3              | 129           | 1   | 1       | 1            |
-| 50  | 1       | 1110                      | 1        | 38                 | 0                    | 210000.0    | 1.9              | 137           | 1   | 0       | 1            |
+| age | anaemia | creatinine_phosphokinase  | diabetes | ejection_fraction | high_blood_pressure | platelets | serum_creatinine | serum_sodium | sex | smoking | DEATH_EVENT |
+|-----|---------|---------------------------|----------|-------------------|---------------------|-----------|------------------|------------- |-----|---------|-------------|
+| 75  | 0       | 582                       | 0        | 20                | 1                   | 265000.0  | 1.9              | 130          | 1   | 0       | 1           |
+| 55  | 0       | 7861                      | 0        | 38                | 0                   | 263358.03 | 1.1              | 136          | 1   | 0       | 1           |
+| 65  | 1       | 146                       | 0        | 20                | 0                   | 162000.0  | 1.3              | 129          | 1   | 1       | 1           |
+| 50  | 1       | 1110                      | 1        | 38                | 0                   | 210000.0  | 1.9              | 137          | 1   | 0       | 1           |
+
 
 > Note: Boolean fields are represented as 0 (No) and 1 (Yes).
 
