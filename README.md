@@ -94,7 +94,8 @@ Steps involved:
 ├── templates/
 │   ├── index.html
 │   ├── data.html
-│   ├── index1.html
+│   └── index1.html
 ├── README.md
 └── heart_failure_clinical_records_dataset.csv
+
 
