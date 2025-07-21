@@ -86,6 +86,7 @@ Steps involved:
 ---
 
 ## 📂 File Structure
+```
 .
 ├── venv
 ├── model_training
